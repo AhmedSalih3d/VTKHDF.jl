@@ -4,14 +4,22 @@ using StaticArrays
 const idType = Int64
 const fType = Float64
 
+"""Write an ASCII attribute `name => value` to `grp`."""
+function _write_ascii_attribute(grp, name, value)
+  dtype = HDF5.datatype(value)
+  HDF5.API.h5t_set_cset(dtype.id, HDF5.API.H5T_CSET_ASCII)
+  dspace = HDF5.dataspace(value)
+  attr = HDF5.create_attribute(grp, name, dtype, dspace)
+  HDF5.write_attribute(attr, dtype, value)
+end
 
 function SaveVTKHDF(filepath, points, variable_names = String[], args...)
   @assert length(variable_names) == length(args) "Same number of variable_names as args is necessary"
-  io   = h5open(filepath, "w")
+  io = h5open(filepath, "w")
   gtop = HDF5.create_group(io, "VTKHDF")
 
   HDF5.attrs(gtop)["Version"] = [2, 3]
-  write_ascii_attribute(gtop, "Type", "PolyData")
+  _write_ascii_attribute(gtop, "Type", "PolyData")
 
   # Points
   np = length(points)
@@ -46,3 +54,7 @@ function SaveVTKHDF(filepath, points, variable_names = String[], args...)
 
   close(io)
 end
+
+N = 500
+points = rand(SVector{3,Float64}, N)
+SaveVTKHDF("W:/Test.vtkhdf", points)
