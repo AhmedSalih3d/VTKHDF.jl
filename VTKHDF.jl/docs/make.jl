@@ -1,8 +1,12 @@
 using Documenter, Example
 
-#Test
-makedocs(sitename="VTKHDF.jl")
+makedocs(
+    sitename = "VTKHDF.jl",
+    pages = [
+        "Home" => "index.md",
+    ],
+)
 
-# if get(ENV, "CI", "") != "" && (get(ENV, "GITHUB_REF", "") == "refs/heads/main" || startswith(get(ENV, "GITHUB_REF", ""), "refs/tags/"))
+if get(ENV, "CI", "") != "" && (get(ENV, "GITHUB_REF", "") == "refs/heads/main" || startswith(get(ENV, "GITHUB_REF", ""), "refs/tags/"))
     deploydocs(repo = "github.com/AhmedSalih3d/VTKHDF.jl.git")
-# end
+end
