@@ -1,7 +1,7 @@
 using Documenter, Example
 
-makedocs(sitename="My Documentation")
+makedocs(sitename="VTKHDF.jl")
 
-deploydocs(
-    repo = "github.com/AhmedSalih3d/VTKHDF.jl.git",
-)
+if get(ENV, "CI", "") != "" && (get(ENV, "GITHUB_REF", "") == "refs/heads/main" || startswith(get(ENV, "GITHUB_REF", ""), "refs/tags/"))
+    deploydocs(repo = "github.com/AhmedSalih3d/VTKHDF.jl.git")
+end
