@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         working-directory: VTKHDF.jl/docs
         run: |
-          julia --project=. -e 'using Pkg; Pkg.develop(PackageSpec(path="..")); Pkg.instantiate()'
+          julia --project=. -e 'using Pkg; Pkg.instantiate()'
       - name: Build and deploy
         working-directory: VTKHDF.jl/docs
         run: |
