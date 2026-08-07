@@ -3,8 +3,10 @@ uuid = "f1fb2dde-7f98-49a9-8ae0-2b7d7f5f6d33"
 version = "0.1.0"
 
 [deps]
-Documenter = "e94cdb99-9ae5-54d7-90a9-32a1c8e35cbe"
-Example = "efe28fd5-a73f-5d30-9ec8-7a618b43bf4a"
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+Example = "7876af07-990d-54b4-ab0e-23690620f79a"
 
 [compat]
+Documenter = "1.17.0"
+Example = "0.5.5"
 julia = ">= 1.0"
