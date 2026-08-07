@@ -1,0 +1,10 @@
+name = "VTKHDFDocs"
+uuid = "f1fb2dde-7f98-49a9-8ae0-2b7d7f5f6d33"
+version = "0.1.0"
+
+[deps]
+Documenter = "e94cdb99-9ae5-54d7-90a9-32a1c8e35cbe"
+Example = "efe28fd5-a73f-5d30-9ec8-7a618b43bf4a"
+
+[compat]
+julia = ">= 1.0"
