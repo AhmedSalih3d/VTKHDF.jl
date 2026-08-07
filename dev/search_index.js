@@ -1,0 +1,3 @@
+var documenterSearchIndex = {"docs":
+[{"category":"section","location":"#VTKHDF-Documentation","page":"Home","text":"Welcome to the VTKHDF documentation.\n\nThis documentation site is generated with Documenter.jl.","title":"VTKHDF Documentation"},{"category":"section","location":"#Getting-Started","page":"Home","text":"To build the docs locally:\n\ncd(\"$(dirname(@__FILE__))\")\njulia --project=. make.jl","title":"Getting Started"},{"category":"section","location":"#Package","page":"Home","text":"VTKHDF provides helpers for working with VTK and HDF data in Julia.\n\nFor usage examples, add content under docs/src/ and rebuild.","title":"Package"}]
+}
