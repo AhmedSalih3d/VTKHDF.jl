@@ -1,0 +1,7 @@
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+VTKHDF = "5276e773-06a5-4b20-aec7-448500f6922b"
+
+[compat]
+Documenter = "1"
+julia = "1"

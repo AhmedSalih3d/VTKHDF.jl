@@ -1,5 +1,9 @@
+module VTKHDF
+
 using HDF5
 using StaticArrays
+
+export SaveVTKHDF
 
 const idType = Int64
 const fType = Float64
@@ -13,8 +17,14 @@ function _write_ascii_attribute(grp, name, value)
   HDF5.write_attribute(attr, dtype, value)
 end
 
-function SaveVTKHDF(filepath, points, variable_names = String[], args...)
-  @assert length(variable_names) == length(args) "Same number of variable_names as args is necessary"
+"""
+    SaveVTKHDF(filepath, points, [variable_names], point_data...)
+
+Write `points` and optional named point-data arrays to a VTKHDF PolyData file.
+Each entry in `variable_names` must have a matching array in `point_data`.
+"""
+function SaveVTKHDF(filepath, points, variable_names = String[], point_data...)
+  @assert length(variable_names) == length(point_data) "Same number of variable_names as point_data arrays is necessary"
   io = h5open(filepath, "w")
   gtop = HDF5.create_group(io, "VTKHDF")
 
@@ -29,8 +39,9 @@ function SaveVTKHDF(filepath, points, variable_names = String[], args...)
   # Point data
   let g = HDF5.create_group(gtop, "PointData")
     for i ∈ eachindex(variable_names)
-      g[variable_names[i]] = reinterpret(reshape, eltype(eltype(args[i])), args[i])
+      g[variable_names[i]] = reinterpret(reshape, eltype(eltype(point_data[i])), point_data[i])
     end
+    close(g)
   end
 
   # Vertices: 1 point per cell
@@ -52,9 +63,8 @@ function SaveVTKHDF(filepath, points, variable_names = String[], args...)
     close(gempty)
   end
 
+  close(gtop)
   close(io)
 end
 
-N = 500
-points = rand(SVector{3,Float64}, N)
-SaveVTKHDF("W:/Test.vtkhdf", points)
+end
