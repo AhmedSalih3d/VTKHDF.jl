@@ -28,7 +28,7 @@ function SaveVTKHDF(filepath, points, variable_names = String[], point_data...)
   io = h5open(filepath, "w")
   gtop = HDF5.create_group(io, "VTKHDF")
 
-  HDF5.attrs(gtop)["Version"] = [2, 3]
+  HDF5.attrs(gtop)["Version"] = [2, 8]
   _write_ascii_attribute(gtop, "Type", "PolyData")
 
   # Points
