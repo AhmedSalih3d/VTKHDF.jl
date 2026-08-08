@@ -1,5 +1,4 @@
 name = "VTKHDFDocs"
-uuid = "f1fb2dde-7f98-49a9-8ae0-2b7d7f5f6d33"
 version = "0.1.0"
 
 [deps]
