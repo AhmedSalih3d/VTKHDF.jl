@@ -26,7 +26,7 @@ Each entry in `variable_names` must have a matching array in `point_data`.
 function SaveVTKHDF(filepath, points, variable_names = String[], point_data...)
   @assert length(variable_names) == length(point_data) "Same number of variable_names as point_data arrays is necessary"
   
-    h5open(filepath, "w") do io
+  h5open(filepath, "w") do io
     gtop = HDF5.create_group(io, "VTKHDF")
 
     HDF5.attrs(gtop)["Version"] = [2, 8]
