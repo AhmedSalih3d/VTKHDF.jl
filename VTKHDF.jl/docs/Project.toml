@@ -1,4 +1,7 @@
 name = "VTKHDF.jl"
+uuid = "5276e773-06a5-4b20-aec7-448500f6922b"
+version = "0.1.0"
+authors = ["AhmedSalih3d <36305327+AhmedSalih3d@users.noreply.github.com>"]
 
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
