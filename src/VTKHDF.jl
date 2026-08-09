@@ -23,6 +23,19 @@ function _write_points(group, points)
   nothing
 end
 
+function _write_points(group, points::AbstractVector{<:StaticVector{1,T}}) where {T}
+  @no_escape begin
+    points_3d = @alloc(T, 3, length(points))
+    for (column, point) in enumerate(points)
+      points_3d[1, column] = point[1]
+      points_3d[2, column] = zero(T)
+      points_3d[3, column] = zero(T)
+    end
+    group["Points"] = points_3d
+    nothing
+  end
+end
+
 function _write_points(group, points::AbstractVector{<:StaticVector{2,T}}) where {T}
   @no_escape begin
     points_3d = @alloc(T, 3, length(points))
