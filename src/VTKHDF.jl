@@ -23,26 +23,20 @@ function _write_points(group, points)
   nothing
 end
 
-function _write_points(group, points::AbstractVector{<:StaticVector{1,T}}) where {T}
+function _write_points(
+  group,
+  points::AbstractVector{<:Union{StaticVector{1,T},StaticVector{2,T}}},
+) where {T}
   @no_escape begin
     points_3d = @alloc(T, 3, length(points))
+    zero_coordinate = zero(T)
     for (column, point) in enumerate(points)
-      points_3d[1, column] = point[1]
-      points_3d[2, column] = zero(T)
-      points_3d[3, column] = zero(T)
-    end
-    group["Points"] = points_3d
-    nothing
-  end
-end
-
-function _write_points(group, points::AbstractVector{<:StaticVector{2,T}}) where {T}
-  @no_escape begin
-    points_3d = @alloc(T, 3, length(points))
-    for (column, point) in enumerate(points)
-      points_3d[1, column] = point[1]
-      points_3d[2, column] = point[2]
-      points_3d[3, column] = zero(T)
+      @inbounds for row in eachindex(point)
+        points_3d[row, column] = point[row]
+      end
+      @inbounds for row = (length(point)+1):3
+        points_3d[row, column] = zero_coordinate
+      end
     end
     group["Points"] = points_3d
     nothing
@@ -53,12 +47,12 @@ end
     SaveVTKHDF(filepath, points, [variable_names], point_data...)
 
 Write `points` and optional named point-data arrays to a VTKHDF PolyData file.
-Two-dimensional points are embedded in three dimensions with a zero z-coordinate.
+One- and two-dimensional points are embedded in three dimensions with zero coordinates.
 Each entry in `variable_names` must have a matching array in `point_data`.
 """
 function SaveVTKHDF(filepath, points, variable_names = String[], point_data...)
   @assert length(variable_names) == length(point_data) "Same number of variable_names as point_data arrays is necessary"
-  
+
   h5open(filepath, "w") do io
     gtop = HDF5.create_group(io, "VTKHDF")
 

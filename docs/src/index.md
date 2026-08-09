@@ -21,9 +21,12 @@ points = rand(SVector{3,Float64}, 500)
 SaveVTKHDF("points.vtkhdf", points)
 ```
 
-Two-dimensional points are also accepted and are written with a zero z-coordinate:
+One- and two-dimensional points are also accepted and are padded with zero coordinates:
 
 ```julia
+points_1d = rand(SVector{1,Float64}, 500)
+SaveVTKHDF("points-1d.vtkhdf", points_1d)
+
 points_2d = rand(SVector{2,Float64}, 500)
 SaveVTKHDF("points-2d.vtkhdf", points_2d)
 ```
