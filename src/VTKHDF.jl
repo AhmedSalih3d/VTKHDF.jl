@@ -1,5 +1,6 @@
 module VTKHDF
 
+using Bumper
 using HDF5
 using StaticArrays
 
@@ -17,10 +18,29 @@ function _write_ascii_attribute(grp, name, value)
   HDF5.write_attribute(attr, dtype, value)
 end
 
+function _write_points(group, points)
+  group["Points"] = reinterpret(reshape, eltype(eltype(points)), points)
+  nothing
+end
+
+function _write_points(group, points::AbstractVector{<:StaticVector{2,T}}) where {T}
+  @no_escape begin
+    points_3d = @alloc(T, 3, length(points))
+    for (column, point) in enumerate(points)
+      points_3d[1, column] = point[1]
+      points_3d[2, column] = point[2]
+      points_3d[3, column] = zero(T)
+    end
+    group["Points"] = points_3d
+    nothing
+  end
+end
+
 """
     SaveVTKHDF(filepath, points, [variable_names], point_data...)
 
 Write `points` and optional named point-data arrays to a VTKHDF PolyData file.
+Two-dimensional points are embedded in three dimensions with a zero z-coordinate.
 Each entry in `variable_names` must have a matching array in `point_data`.
 """
 function SaveVTKHDF(filepath, points, variable_names = String[], point_data...)
@@ -35,7 +55,7 @@ function SaveVTKHDF(filepath, points, variable_names = String[], point_data...)
     # Points
     np = length(points)
     gtop["NumberOfPoints"] = [np]
-    gtop["Points"] = reinterpret(reshape, eltype(eltype(points)), points)
+    _write_points(gtop, points)
 
     # Point data
     let g = HDF5.create_group(gtop, "PointData")
