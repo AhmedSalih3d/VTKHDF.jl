@@ -17,7 +17,7 @@ using VTKHDF
 
         vtkhdf = file["VTKHDF"]
         @test read_attribute(vtkhdf, "Type") == "PolyData"
-        @test read_attribute(vtkhdf, "Version") == [2, 3]
+        @test read_attribute(vtkhdf, "Version") == [2, 8]
         @test Set(keys(vtkhdf)) == Set([
           "Lines",
           "NumberOfPoints",
@@ -44,6 +44,24 @@ using VTKHDF
           @test isempty(read(cells["Connectivity"]))
           @test read(cells["Offsets"]) == [0]
         end
+      end
+    end
+  end
+
+  @testset "two-dimensional points" begin
+    mktempdir() do directory
+      filepath = joinpath(directory, "points-2d.vtkhdf")
+      points = [SVector(1.0f0, 2.0f0), SVector(3.0f0, 4.0f0)]
+
+      SaveVTKHDF(filepath, points)
+
+      h5open(filepath, "r") do file
+        vtkhdf = file["VTKHDF"]
+        stored_points = read(vtkhdf["Points"])
+
+        @test read(vtkhdf["NumberOfPoints"]) == [length(points)]
+        @test stored_points == Float32[1 3; 2 4; 0 0]
+        @test eltype(stored_points) == Float32
       end
     end
   end
